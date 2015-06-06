@@ -1,0 +1,3 @@
+UPDATE containment_activities SET district = "Lahore" WHERE district IS NULL AND town_name in ('Data Gunj Baksh Town', 'Allama Iqbal Town', 'Samanabad Town', 'Ravi Town', 'Cantonment', 'Shalamar Town', 'Aziz Bhati Town', 'Nishter Town', 'Gulberg Town', 'Wahga Town', 'Rawal Town', 'LAHORE')
+
+UPDATE irs_patients SET district = "Lahore" WHERE district IS NULL AND town_name in ('Cantonment','Ravi Town','Aziz Bhati Town','Data Gunj Baksh Town','Gulberg Town','Nishter Town','Allama Iqbal Town','Shalamar Town','Wahga Town','Samanabad Town','[true,"Wahga Town"]',"Rawal Town", 'LAHORE')

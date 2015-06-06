@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <meta charset="utf-8">
+    <title>Simple markers</title>
+    <style>
+      html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+      #map {
+        height: 100%;
+      }
+    </style>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+
+  </head>
+  <body>
+    <script type="text/javascript">
+      var coords_data = [];
+      var hull_data = [];
+      $(document).ready(function() {
+        var file = 'http://localhost/Dengue/convex_hull_cluster0.csv';
+        $.ajax({
+            type: "GET",
+            url: file,
+            dataType: "text",
+            success: function(data) {
+              hull_data = processData(data);
+            }
+         });
+        var file = 'http://localhost/Dengue/cluster0.csv';
+        $.ajax({
+            type: "GET",
+            url: file,
+            dataType: "text",
+            success: function(data) {
+              coords_data = processData(data);
+            }
+         });
+      });
+
+      function processData(allText) {
+
+          var allTextLines = allText.split(/\r\n|\n/);
+          var lines = [];
+
+          for (var i=0; i<allTextLines.length; i++) {
+              var data = allTextLines[i].split(',');
+              var tarr = [];
+              for (var j=0; j<2; j++) {
+                  tarr.push(data[j]);
+              }
+              //alert(parseFloat(tarr[0]) + ' ' + parseFloat(tarr[1]));
+              lines.push({lat: parseFloat(tarr[0]), lng: parseFloat(tarr[1])});
+          }
+           console.log(lines);
+           return lines;
+      }
+    </script>
+    <div id="map"></div>
+    <script>
+    // This example creates a simple polygon representing the Bermuda Triangle.
+
+      function initMap() {
+
+        // Define the LatLng coordinates for the polygon's path.
+        var triangleCoords = hull_data;
+
+        // initiate map
+        var map = new google.maps.Map(document.getElementById('map'), {
+          zoom: 12,
+          center: triangleCoords[0],
+          mapTypeId: google.maps.MapTypeId.TERRAIN
+        });
+
+        // Construct the polygon.
+        /*
+        var bermudaTriangle = new google.maps.Polygon({
+          paths: triangleCoords,
+          strokeColor: '#FF0000',
+          strokeOpacity: 0.8,
+          strokeWeight: 2,
+          fillColor: '#FF0000',
+          fillOpacity: 0.35
+        });
+        bermudaTriangle.setMap(map);
+        */
+
+        // place the markers
+        var markerCoords = coords_data;
+        var markers = [];
+
+        for (var i = 0; i <= markerCoords.length; i++){
+          markers[i] = new google.maps.Marker({
+            position: markerCoords[i],
+            map: map,
+          });
+        }
+
+        // create poly lines
+        var flightPlanCoordinates = hull_data;
+        var flightPath = new google.maps.Polyline({
+          path: flightPlanCoordinates,
+          geodesic: true,
+          strokeColor: '#0000FF',
+          strokeOpacity: 1.0,
+          strokeWeight: 3
+        });
+
+        flightPath.setMap(map);
+      }
+    
+      /*function initMap() {
+        var markerCoords = coords_data;
+
+        var map = new google.maps.Map(document.getElementById('map'), {
+          zoom: 12,
+          center: markerCoords[0]
+        });
+
+        var markers = [];
+        for (var i = 0; i <= markerCoords.length; i++){
+          markers[i] = new google.maps.Marker({
+            position: markerCoords[i],
+            map: map,
+          });
+        }
+      }*/
+      
+
+    </script>
+    <script async defer
+        src="https://maps.googleapis.com/maps/api/js?signed_in=true&callback=initMap"></script>
+  </body>
+</html>

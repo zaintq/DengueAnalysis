@@ -1,0 +1,32 @@
+2012
+min_humidity: 76.640522875817
+max_temperature: 32.872549119338494
+max_humidity: 55.09803921568628
+min_temperature: 21.935294120140323
+min_rain_fall: 3.0274510054416908
+
+2013
+min_humidity: 81.60130718954248
+max_temperature: 32.43921576605903
+max_humidity: 60.673202614379086
+min_temperature: 21.307843183380328
+min_rain_fall: 4.237254885189674
+
+2014
+min_humidity: 64.08496732026144
+max_temperature: 32.3411764880411
+max_humidity: 40.052287581699346
+min_temperature: 22.43071893928877
+min_rain_fall: 3.919607843302823
+
+2015
+min_humidity: 22.401315789473685
+max_temperature: 31.399999969883968
+max_humidity: 18.80263157894737
+min_temperature: 21.27828944356818
+min_rain_fall: 2.9532894819092594
+
+SELECT year(date), AVG(min_humidity), AVG(max_temperature), AVG(max_humidity), AVG(min_temperature), AVG(min_rain_fall) 
+FROM `weather_data` 
+WHERE date BETWEEN '2015-07-01' AND '2015-11-31'
+GROUP BY YEAR(date)

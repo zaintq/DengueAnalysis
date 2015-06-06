@@ -1,0 +1,1 @@
+A dump of a subset of scripts used in the statistical analysis of dengue data. The data consists of prevention activities performed by teams to curb the spread of dengue fever, along with data of patients and data of dengue mosquitoes. 

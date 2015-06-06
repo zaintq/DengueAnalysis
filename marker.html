@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <meta charset="utf-8">
+    <title>Simple markers</title>
+    <style>
+      html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+      #map {
+        height: 100%;
+      }
+    </style>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+
+  </head>
+  <body>
+    <script type="text/javascript">
+      
+      var coords_data = [];
+      var hull_data = [];
+      var total_clusters = 2;
+
+      $(document).ready(function() {
+        for(var i = 0; i < total_clusters; i++){
+          
+          hull_data[i] = [];
+          var file = 'http://localhost/Dengue/convex_hull_cluster'+i+'.csv';
+          $.ajax({
+              type: "GET",
+              url: file,
+              dataType: "text",
+              success: function(data) {
+                hull_data[i] = processData(data);
+              }
+           });
+
+          coords_data[i] = [];
+          var file = 'http://localhost/Dengue/cluster'+i+'.csv';
+          $.ajax({
+              type: "GET",
+              url: file,
+              dataType: "text",
+              success: function(data) {
+                coords_data[i] = processData(data);
+              }
+          });
+        }
+      });
+
+      function processData(allText) {
+          alert("processing file data");
+          var allTextLines = allText.split(/\r\n|\n/);
+          var lines = [];
+
+          for (var i=0; i<allTextLines.length; i++) {
+              var data = allTextLines[i].split(',');
+              var tarr = [];
+              for (var j=0; j<2; j++) {
+                  tarr.push(data[j]);
+              }
+              lines.push({lat: parseFloat(tarr[0]), lng: parseFloat(tarr[1])});
+          }
+           return lines;
+      }
+      $(document).ajaxStop(function() {
+        alert("file read and dead");
+        alert("hull length:" + hull_data.length);
+        alert("coords length:" + coords_data.length);
+        alert("hull:" + hull_data[2][0]);
+        alert("coords:" + coords_data[2][0]);
+        console.log(hull_data);
+        console.log(coords_data);
+      });
+
+    </script>
+    <div id="map"></div>
+    <script>
+
+    
+    // This example creates a simple polygon representing the Bermuda Triangle.
+      
+
+      function initMap() {
+/*        alert(hull_data[0][0]);
+        alert(coords_data[0][0]);
+        console.log(hull_data);
+        console.log(coords_data);
+
+        // initiate map
+        var map = new google.maps.Map(document.getElementById('map'), {
+          zoom: 12,
+          center: hull_data[0][0],
+          mapTypeId: google.maps.MapTypeId.TERRAIN
+        });
+
+        for (var i = 0; i < total_clusters; i++) {
+
+          // place the markers
+          var markerCoords = coords_data[i];
+          var markers = [];
+
+          for (var i = 0; i <= markerCoords.length; i++){
+            markers[i] = new google.maps.Marker({
+              position: markerCoords[i],
+              map: map,
+            });
+          }
+
+          // create poly lines
+          var flightPlanCoordinates = hull_data[i];
+          var flightPath = new google.maps.Polyline({
+            path: flightPlanCoordinates,
+            geodesic: true,
+            strokeColor: '#0000FF',
+            strokeOpacity: 1.0,
+            strokeWeight: 3
+          });
+
+          flightPath.setMap(map);
+        }*/
+      }
+      
+
+    </script>
+    <script
+        src="https://maps.googleapis.com/maps/api/js?signed_in=true&callback=initMap">
+    </script>
+  </body>
+</html>
